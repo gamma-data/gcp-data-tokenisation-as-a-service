@@ -1,0 +1,51 @@
+@startuml
+title Simple GCP Tokenisation Service - De-Identification
+actor User
+participant "Token Service" << cloud_function >>
+participant "DeIdentification Cache" << memorystore >>
+participant "DeIdentification Store" << datastore >>
+participant "ReIdentification Cache" << memorystore >>
+participant "ReIdentification Store" << datastore >>
+
+alt cache hit
+    User -> "Token Service": deidentify(natural_key)
+activate "Token Service"
+    "Token Service" -> "DeIdentification Cache": get_token(natural_key, from_cache)
+        note right : [ natural_key, token ]
+    "Token Service" <- "DeIdentification Cache": << token >>
+    User <- "Token Service": << token >>
+end
+alt cache miss
+    User -> "Token Service": deidentify(natural_key)
+    "Token Service" -> "DeIdentification Cache": get_token(natural_key, from_cache)
+    "Token Service" <- "DeIdentification Cache": << cache miss >>
+    "Token Service" -> "DeIdentification Store": get_token(natural_key, from_store)
+        note right : [ natural_key, token ]
+    "Token Service" <- "DeIdentification Store": << token >>
+    "Token Service" --> "DeIdentification Cache": put_token(natural_key, token, to_cache)
+    User <- "Token Service": << token >>
+end
+alt store miss
+    User -> "Token Service": deidentify(natural_key)
+    "Token Service" -> "DeIdentification Cache": get_token(natural_key, from_cache)
+    "Token Service" <- "DeIdentification Cache": << cache miss >>
+    "Token Service" -> "DeIdentification Store": get_token(natural_key, from_store)
+    "Token Service" <- "DeIdentification Store": << store miss >>
+    alt generate_token
+        "Token Service" -> "Token Service": token=generate_token(natural_key)
+            note left 
+                generate random token
+                matching natural key
+                data type
+            end note
+    end
+    "Token Service" -> "DeIdentification Store": put_token(natural_key, token, to_deid_store)
+    "Token Service" -> "ReIdentification Store": put_token(natural_key, token, to_reid_store)
+        note right : [ token, natural_key ]
+    "Token Service" --> "DeIdentification Cache": put_token(natural_key, token, to_deid_cache)
+    "Token Service" --> "ReIdentification Cache": put_token(natural_key, token, to_reid_cache)
+        note right : [ token, natural_key ]
+    User <- "Token Service": << token >>
+deactivate "Token Service"
+end
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+title Simple GCP Tokenisation Service - Re-Identification
+actor User
+participant "Token Service" << cloud_function >>
+participant "DeIdentification Cache" << memorystore >>
+participant "DeIdentification Store" << datastore >>
+participant "ReIdentification Cache" << memorystore >>
+participant "ReIdentification Store" << datastore >>
+
+alt cache hit
+    User -> "Token Service": reidentify(token)
+activate "Token Service"
+    "Token Service" -> "ReIdentification Cache": get_natural_key(token, from_cache)
+        note right : [ token, natural_key ]
+    "Token Service" <- "ReIdentification Cache": <i><< natural_key >></i>
+    User <- "Token Service": <i><< natural_key >></i>
+end
+
+alt cache miss
+    User -> "Token Service": reidentify(token)
+    "Token Service" -> "ReIdentification Cache": get_natural_key(token, from_cache)
+    "Token Service" <- "ReIdentification Cache": <i><< cache miss >></i>
+    "Token Service" -> "ReIdentification Store": get_natural_key(token, from_store)
+        note right : [ token, natural_key ]
+    "Token Service" <- "ReIdentification Store": <i><< natural_key >></i>
+    "Token Service" --> "ReIdentification Cache": put_natural_key(natural_key, token, to_cache)
+    User <- "Token Service": <i><< natural_key >></i>
+end
+
+alt store miss
+    User -> "Token Service": reidentify(token)
+    "Token Service" -> "ReIdentification Cache": get_natural_key(token)
+    "Token Service" <- "ReIdentification Cache": <i><< cache miss >></i>
+    "Token Service" -> "ReIdentification Cache": get_natural_key(token, from_store)
+    "Token Service" <- "ReIdentification Cache": <i><< store miss >></i>
+    User <- "Token Service": << ERROR >>
+deactivate "Token Service"
+end
+@enduml

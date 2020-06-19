@@ -21,7 +21,7 @@ def main(request):
 		if content_type == 'application/json':
 			request_json = request.get_json(silent=True)
 			if request_json and 'token' in request_json:
-				name = request_json['token']
+				token = request_json['token']
 			else:
 				raise ValueError("JSON is invalid, or missing a 'token' property")
 		elif content_type == 'application/octet-stream':

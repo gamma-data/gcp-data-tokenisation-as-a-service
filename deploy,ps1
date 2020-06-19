@@ -14,22 +14,26 @@ cd ..
 
 # application/json example
 # token does not exist 
-
-curl -d '{"natural_key":"thisisatestkey"}' -H "Content-Type: application/json" \
--X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn
+$ token=$(curl -d '{"natural_key":"thisisatestkey1234"}' -H "Content-Type: application/json" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn)
+$ echo generated token : $token
+generated token : 5e379c60-2f68-4db8-ae9b-001c08e17785
 
 # token exists
-
-curl -d '{"natural_key":"thisisatestkey"}' -H "Content-Type: application/json" \
--X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn
+$ token=$(curl -d '{"natural_key":"thisisatestkey1234"}' -H "Content-Type: application/json" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn)
+$ echo retrieved token : $token
+retrieved token : 5e379c60-2f68-4db8-ae9b-001c08e17785
 
 # x-www-form-urlencoded example
 # token does not exist 
-
-curl -d "natural_key=thisisatestkey2" -H "Content-Type: application/x-www-form-urlencoded" \
--X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn
+$ token=$(curl -d "natural_key=thisisatestkey5678" -H "Content-Type: application/x-www-form-urlencoded" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn)
+$ echo generated token : $token
+generated token : 6c847cd8-f9fc-405c-a919-2a04f2f78709
 
 # token exists
-
-curl -d "natural_key=thisisatestkey2" -H "Content-Type: application/x-www-form-urlencoded" \
--X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn
+$ token=$(curl -d "natural_key=thisisatestkey5678" -H "Content-Type: application/x-www-form-urlencoded" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn)
+$ echo retrieved token : $token
+retrieved token : 6c847cd8-f9fc-405c-a919-2a04f2f78709

@@ -13,6 +13,7 @@ def reidentify(token):
 			abort(404)
 	except Exception as e:
 		print(str(e))
+		abort(500)
 
 def main(request):
 	try:
@@ -34,3 +35,4 @@ def main(request):
 		return reidentify(token)
 	except Exception as e:
 		print(str(e))
+		abort(500)

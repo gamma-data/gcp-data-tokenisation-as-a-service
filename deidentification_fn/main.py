@@ -1,5 +1,6 @@
 from google.cloud import firestore
 import hashlib, uuid
+from flask import abort
 
 project_id = "data-treatment-as-a-service"
 
@@ -33,6 +34,7 @@ def deidentify(natural_key):
 			return deid_doc_ref.get().get("token")
 	except Exception as e:
 		print(str(e))
+		abort(500)
 
 def main(request):
 	try:
@@ -54,3 +56,4 @@ def main(request):
 		return deidentify(natural_key)
 	except Exception as e:
 		print(str(e))
+		abort(500)

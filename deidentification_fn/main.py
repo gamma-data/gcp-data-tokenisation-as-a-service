@@ -42,7 +42,7 @@ def main(request):
 		if content_type == 'application/json':
 			request_json = request.get_json(silent=True)
 			if request_json and 'natural_key' in request_json:
-				name = request_json['natural_key']
+				natural_key = request_json['natural_key']
 			else:
 				raise ValueError("JSON is invalid, or missing a 'natural_key' property")
 		elif content_type == 'application/octet-stream':

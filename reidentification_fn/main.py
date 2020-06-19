@@ -16,11 +16,11 @@ def main(request):
 		else:
 			raise ValueError("JSON is invalid, or missing a 'token' property")
 	elif content_type == 'application/octet-stream':
-        token = request.data
+		token = request.data
 	elif content_type == 'text/plain':
-        token = request.data
+		token = request.data
 	elif content_type == 'application/x-www-form-urlencoded':
-        token = request.form.get('token')
+		token = request.form.get('token')
 	else:
 		raise ValueError("Unknown content type: {}".format(content_type))
 	return reidentify(token)

@@ -1,5 +1,7 @@
 gcloud config set project data-treatment-as-a-service
 
+# you will need to assign the "Google Cloud Functions Service Agent" service account a role that has sufficient privelges to upload staged function artefacts to GCS
+
 cd deidentification_fn
 gcloud functions deploy deidentification_fn --entry-point main --runtime python37 --trigger-http --allow-unauthenticated
 

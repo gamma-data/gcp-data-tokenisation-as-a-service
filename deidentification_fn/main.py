@@ -40,11 +40,11 @@ def main(request):
 		else:
 			raise ValueError("JSON is invalid, or missing a 'natural_key' property")
 	elif content_type == 'application/octet-stream':
-        natural_key = request.data
+		natural_key = request.data
 	elif content_type == 'text/plain':
-        natural_key = request.data
+		natural_key = request.data
 	elif content_type == 'application/x-www-form-urlencoded':
-        natural_key = request.form.get('natural_key')
+		natural_key = request.form.get('natural_key')
 	else:
 		raise ValueError("Unknown content type: {}".format(content_type))
 	return deidentify(natural_key)

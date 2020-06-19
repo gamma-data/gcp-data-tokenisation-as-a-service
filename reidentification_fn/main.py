@@ -12,23 +12,19 @@ def reidentify(token):
 		abort(404)
 
 def main(request):
-	try:
-		content_type = request.headers['content-type']
-		if content_type == 'application/json':
-			request_json = request.get_json(silent=True)
-			if request_json and 'token' in request_json:
-				token = request_json['token']
-			else:
-				raise ValueError("JSON is invalid, or missing a 'token' property")
-		elif content_type == 'application/octet-stream':
-			token = request.data
-		elif content_type == 'text/plain':
-			token = request.data
-		elif content_type == 'application/x-www-form-urlencoded':
-			token = request.form.get('token')
+	content_type = request.headers['content-type']
+	if content_type == 'application/json':
+		request_json = request.get_json(silent=True)
+		if request_json and 'token' in request_json:
+			token = request_json['token']
 		else:
-			raise ValueError("Unknown content type: {}".format(content_type))
-		return reidentify(token)
-	except Exception as e:
-		print(str(dir(e)))
-		abort(500)
+			raise ValueError("JSON is invalid, or missing a 'token' property")
+	elif content_type == 'application/octet-stream':
+		token = request.data
+	elif content_type == 'text/plain':
+		token = request.data
+	elif content_type == 'application/x-www-form-urlencoded':
+		token = request.form.get('token')
+	else:
+		raise ValueError("Unknown content type: {}".format(content_type))
+	return reidentify(token)

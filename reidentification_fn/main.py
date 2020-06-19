@@ -4,16 +4,12 @@ from flask import abort
 project_id = "data-treatment-as-a-service"
 
 def reidentify(token):
-	try:
-		db = firestore.Client(project=project_id)
-		reid_doc_ref = db.collection(u'reid-store').document(str(token))
-		if reid_doc_ref.get().exists:
-			return reid_doc_ref.get().get("natural_key")
-		else:
-			abort(404)
-	except Exception as e:
-		print(str(e))
-		abort(500)
+	db = firestore.Client(project=project_id)
+	reid_doc_ref = db.collection(u'reid-store').document(str(token))
+	if reid_doc_ref.get().exists:
+		return reid_doc_ref.get().get("natural_key")
+	else:
+		abort(404)
 
 def main(request):
 	try:

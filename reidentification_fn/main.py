@@ -30,5 +30,5 @@ def main(request):
 			raise ValueError("Unknown content type: {}".format(content_type))
 		return reidentify(token)
 	except Exception as e:
-		print(str(e))
+		print(str(e.errno))
 		abort(500)

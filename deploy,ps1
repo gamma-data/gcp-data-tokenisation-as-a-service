@@ -9,3 +9,27 @@ cd ../reidentification_fn
 gcloud functions deploy reidentification_fn --entry-point main --runtime python37 --trigger-http --allow-unauthenticated
 
 cd ..
+
+
+
+# application/json example
+# token does not exist 
+
+curl -d '{"natural_key":"thisisatestkey"}' -H "Content-Type: application/json" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn
+
+# token exists
+
+curl -d '{"natural_key":"thisisatestkey"}' -H "Content-Type: application/json" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn
+
+# x-www-form-urlencoded example
+# token does not exist 
+
+curl -d "natural_key=thisisatestkey2" -H "Content-Type: application/x-www-form-urlencoded" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn
+
+# token exists
+
+curl -d "natural_key=thisisatestkey2" -H "Content-Type: application/x-www-form-urlencoded" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn

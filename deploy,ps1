@@ -10,20 +10,31 @@ gcloud functions deploy reidentification_fn --entry-point main --runtime python3
 
 cd ..
 
-
-
 # application/json example
-# token does not exist 
+# generate a token that does not exist 
 $ token=$(curl -d '{"natural_key":"thisisatestkey1234"}' -H "Content-Type: application/json" \
 -X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn)
 $ echo generated token : $token
 generated token : 5e379c60-2f68-4db8-ae9b-001c08e17785
 
-# token exists
+# return a token that exists
 $ token=$(curl -d '{"natural_key":"thisisatestkey1234"}' -H "Content-Type: application/json" \
 -X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn)
 $ echo retrieved token : $token
 retrieved token : 5e379c60-2f68-4db8-ae9b-001c08e17785
+
+# reidentify a token
+$ natural_key=$(curl -d '{"token":"5e379c60-2f68-4db8-ae9b-001c08e17785"}' -H "Content-Type: application/json" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/reidentification_fn)
+$ echo retrieved natural_key : $natural_key
+retrieved natural_key : thisisatestkey1234
+
+# try to reidentify a token that does not exist
+$ natural_key=$(curl -d '{"token":"XXXXXXXX-2f68-4db8-ae9b-001c08e17785"}' -H "Content-Type: application/json" \
+-X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/reidentification_fn)
+$ echo retrieved natural_key : $natural_key
+retrieved natural_key : <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"> <title>404 Not Found</title> <h1>Not Found</h1> <p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try
+ again.</p>
 
 # x-www-form-urlencoded example
 # token does not exist 
@@ -37,3 +48,7 @@ $ token=$(curl -d "natural_key=thisisatestkey5678" -H "Content-Type: application
 -X POST https://us-central1-data-treatment-as-a-service.cloudfunctions.net/deidentification_fn)
 $ echo retrieved token : $token
 retrieved token : 6c847cd8-f9fc-405c-a919-2a04f2f78709
+
+
+
+

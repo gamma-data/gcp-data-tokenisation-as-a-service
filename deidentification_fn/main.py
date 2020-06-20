@@ -34,7 +34,7 @@ def deidentify(natural_key):
 			return deid_doc_ref.get().get("token")
 	except Exception as e:
 		print(str(e))
-		#abort(500)
+		abort(500)
 
 def main(request):
 	try:
@@ -53,7 +53,9 @@ def main(request):
 			natural_key = request.form.get('natural_key')
 		else:
 			raise ValueError("Unknown content type: {}".format(content_type))
-		return deidentify(natural_key)
+		token = deidentify(natural_key)
+		print("token = %s" % (str(token)))
+		return token
 	except Exception as e:
 		print(str(e))
-		#abort(500)
+		abort(500)

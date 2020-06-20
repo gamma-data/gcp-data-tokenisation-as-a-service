@@ -6,6 +6,7 @@ project_id = "data-treatment-as-a-service"
 
 def deidentify(natural_key):
 	try:
+		print("here")
 		# get hash of natural_key
 		nk_hash = hashlib.sha256(str(natural_key).encode('UTF-8')).hexdigest()
 

@@ -53,6 +53,7 @@ def main(request):
 			natural_key = request.form.get('natural_key')
 		else:
 			raise ValueError("Unknown content type: {}".format(content_type))
+		print("getting token")
 		token = deidentify(natural_key)
 		print("token = %s" % (str(token)))
 		return token

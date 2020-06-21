@@ -1,12 +1,11 @@
 from google.cloud import firestore
-import hashlib, uuid
+import hashlib, uuid, os
 from flask import abort
 
 project_id = "data-treatment-as-a-service"
 
 def deidentify(natural_key):
 	try:
-		print("here")
 		# get hash of natural_key
 		nk_hash = hashlib.sha256(str(natural_key).encode('UTF-8')).hexdigest()
 
@@ -39,6 +38,8 @@ def deidentify(natural_key):
 
 def main(request):
 	try:
+		debug = os.environ.get('DEBUG', False)
+		print("debug is " + str(debug))
 		content_type = request.headers['content-type']
 		if content_type == 'application/json':
 			request_json = request.get_json(silent=True)

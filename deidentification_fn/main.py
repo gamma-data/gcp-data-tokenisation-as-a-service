@@ -38,7 +38,8 @@ def deidentify(natural_key):
 
 def main(request):
 	try:
-		debug = eval(os.environ.get('DEBUG', False))
+		debug = eval(str(os.environ.get('DEBUG', False)))
+		
 		print("debug is " + str(debug))
 		content_type = request.headers['content-type']
 		if content_type == 'application/json':
